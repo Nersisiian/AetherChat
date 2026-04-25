@@ -25,14 +25,13 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -e ".[dev]"
-          # Установим ruff отдельно (на всякий случай)
           pip install ruff mypy
 
       - name: Lint with ruff
         run: ruff check .
 
       - name: Type check with mypy
-        run: mypy src/ --ignore-missing-imports   # добавил флаг, чтобы не падало без stubs
+        run: mypy src --ignore-missing-imports --explicit-package-bases
 
       - name: Test with pytest
         run: pytest
