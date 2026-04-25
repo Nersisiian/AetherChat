@@ -1,6 +1,6 @@
-from src.core.retrieval.hybrid_search import HybridRetriever
-from src.core.llm.openai_llm import OpenAILLM
-from src.core.agent_graph import RAGAgent
+from ..core.retrieval.hybrid_search import HybridRetriever
+from ..core.llm.openai_llm import OpenAILLM
+from ..core.agent_graph import RAGAgent
 
 _retriever = None
 _agent = None
