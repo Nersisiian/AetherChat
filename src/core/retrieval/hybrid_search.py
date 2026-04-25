@@ -1,5 +1,4 @@
-from typing import List, Tuple, Optional
-import asyncio
+from typing import List
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
 from langchain.retrievers import EnsembleRetriever
@@ -8,9 +7,7 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 from langchain_huggingface import HuggingFaceEmbeddings
 from ..config import settings
-import importlib.util
 
-# Lazy loading of FlagEmbedding to avoid hard dependency
 class HybridRetriever:
     def __init__(self, documents: List[Document]):
         self.documents = documents
@@ -19,17 +16,16 @@ class HybridRetriever:
             model_kwargs={"device": "cpu"}
         )
         self.client = QdrantClient(url=settings.qdrant_url, api_key=settings.qdrant_api_key)
-        # Ensure collection exists
         self.client.recreate_collection(
             collection_name=settings.collection_name,
-            vectors_config=VectorParams(size=1024, distance=Distance.COSINE),  # bge-m3 dim=1024
+            vectors_config=VectorParams(size=1024, distance=Distance.COSINE),
         )
         self.vector_store = QdrantVectorStore(
             client=self.client,
             collection_name=settings.collection_name,
             embedding=self.embedding_model
         )
-        self._bm25_retriever = None  # lazy init
+        self._bm25_retriever = None
         self._ensemble = None
         self._reranker = None
         if settings.use_rerank:
@@ -59,7 +55,6 @@ class HybridRetriever:
         return self._ensemble
 
     def index_documents(self):
-        """Insert all documents into Qdrant."""
         self.vector_store.add_documents(self.documents)
 
     def retrieve(self, query: str) -> List[Document]:

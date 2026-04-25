@@ -1,10 +1,8 @@
-# src/evaluation/run_eval.py
 from .metrics import faithfulness, rouge_l
 from ..core.retrieval.hybrid_search import HybridRetriever
 from ..core.llm.openai_llm import OpenAILLM
 from ..core.agent_graph import RAGAgent
 import json
-import asyncio
 
 async def evaluate_sample(agent, sample):
     answer = await agent.arun(sample["question"])
@@ -20,7 +18,7 @@ async def evaluate_sample(agent, sample):
 async def run_evaluation(dataset_path: str = "src/evaluation/sample_qa.json"):
     with open(dataset_path) as f:
         dataset = json.load(f)
-    retriever = HybridRetriever([])  # Документы должны быть проиндексированы заранее
+    retriever = HybridRetriever([])
     agent = RAGAgent(retriever, OpenAILLM())
     results = []
     for sample in dataset:

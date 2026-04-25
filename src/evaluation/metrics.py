@@ -1,10 +1,8 @@
-# src/evaluation/metrics.py
 from rouge_score import rouge_scorer
 from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 import re
 
 def faithfulness(answer: str, context: str) -> float:
-    # Простая проверка: содержит ли ответ слова из контекста? Это заглушка.
     answer_words = set(answer.lower().split())
     context_words = set(context.lower().split())
     if not context_words:
@@ -15,5 +13,3 @@ def rouge_l(reference: str, candidate: str) -> float:
     scorer = rouge_scorer.RougeScorer(['rougeL'], use_stemmer=True)
     scores = scorer.score(reference, candidate)
     return scores['rougeL'].fmeasure
-
-# Остальные метрики можно добавить.

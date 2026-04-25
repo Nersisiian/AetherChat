@@ -1,5 +1,3 @@
-# src/core/llm/openai_llm.py
-import os
 from typing import AsyncIterator, List, Dict
 from openai import AsyncOpenAI
 from .base import BaseLLM

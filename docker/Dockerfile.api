@@ -1,8 +1,8 @@
-# docker/Dockerfile.api
 FROM python:3.11-slim
 WORKDIR /app
 COPY pyproject.toml .
 RUN pip install --no-cache-dir .
 COPY src/ src/
-COPY .env .
+# env-переменные передаются через docker run -e или docker-compose environment
+ENV PYTHONUNBUFFERED=1
 CMD ["uvicorn", "src.api.main:app", "--host", "0.0.0.0", "--port", "8000"]

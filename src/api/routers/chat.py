@@ -1,9 +1,8 @@
-# src/api/routers/chat.py
-from fastapi import APIRouter, WebSocket, Depends, HTTPException
+from fastapi import APIRouter, WebSocket, Depends
 from pydantic import BaseModel
 from typing import List
 import json
-from ..dependencies import get_agent, get_retriever
+from ..dependencies import get_agent
 
 router = APIRouter()
 

@@ -1,5 +1,4 @@
-# src/api/routers/eval.py
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 from ...evaluation.run_eval import run_evaluation
 router = APIRouter()
 

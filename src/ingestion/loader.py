@@ -1,10 +1,7 @@
-# src/ingestion/loader.py
-import os
 import pdfplumber
 from langchain_core.documents import Document
-import asyncio
-from bs4 import BeautifulSoup
 import httpx
+from bs4 import BeautifulSoup
 
 async def load_pdf(file_path: str) -> list[Document]:
     docs = []
@@ -23,6 +20,7 @@ async def load_web(url: str) -> Document:
         return Document(page_content=text, metadata={"source": url, "type": "web"})
 
 def load_markdown(folder: str) -> list[Document]:
+    import os
     docs = []
     for root, _, files in os.walk(folder):
         for f in files:
@@ -33,6 +31,7 @@ def load_markdown(folder: str) -> list[Document]:
     return docs
 
 async def ingest_all(paths: list[str]) -> list[Document]:
+    import os
     all_docs = []
     for path in paths:
         if path.endswith(".pdf"):

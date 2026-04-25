@@ -1,7 +1,8 @@
 import pytest
 from httpx import AsyncClient, ASGITransport
 from src.api.main import app
-from src.api.dependencies import get_retriever, _agent, _retriever
+from src.api.dependencies import get_retriever
+from langchain_core.documents import Document
 
 @pytest.fixture
 def anyio_backend():
@@ -9,7 +10,6 @@ def anyio_backend():
 
 @pytest.fixture
 async def client():
-    # Подменяем зависимости на заглушки (если нужно)
     async def override_get_retriever():
         from src.core.retrieval.hybrid_search import HybridRetriever
         docs = [
@@ -32,12 +32,7 @@ async def test_health(client):
 
 @pytest.mark.anyio
 async def test_chat_endpoint(client):
-    # Сначала выполним индексацию (мок)
-    response = await client.post("/api/v1/ingest/documents", files=[])
+    await client.post("/api/v1/ingest/documents", files=[])
+    response = await client.post("/api/v1/chat/", json={"query": "Что говорят документы?"})
     assert response.status_code == 200
-    # Теперь запрос к чату
-    payload = {"query": "Что говорят документы?"}
-    response = await client.post("/api/v1/chat/", json=payload)
-    assert response.status_code == 200
-    data = response.json()
-    assert "answer" in data
+    assert "answer" in response.json()
