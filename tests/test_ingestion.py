@@ -1,11 +1,9 @@
 import pytest
-from src.ingestion.loader import load_pdf, load_web, load_markdown, ingest_all
 from src.ingestion.chunker import chunk_documents
 from langchain_core.documents import Document
 
 @pytest.mark.anyio
 async def test_load_pdf():
-    # для реального теста нужен PDF файл, можно пропустить
     pass
 
 def test_chunker():

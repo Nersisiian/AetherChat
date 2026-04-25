@@ -1,6 +1,4 @@
 from rouge_score import rouge_scorer
-from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-import re
 
 def faithfulness(answer: str, context: str) -> float:
     answer_words = set(answer.lower().split())

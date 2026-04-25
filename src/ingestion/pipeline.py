@@ -1,3 +1,9 @@
+"""
+Pipeline for ingesting documents into the vector store.
+Usage:
+    python -m src.ingestion.pipeline --files ./docs/manual.pdf --url https://example.com
+"""
+
 import asyncio
 import argparse
 from pathlib import Path
@@ -6,6 +12,7 @@ from typing import List
 from .loader import ingest_all
 from .chunker import chunk_documents
 from ..core.retrieval.hybrid_search import HybridRetriever
+
 
 class IngestionPipeline:
     def __init__(self):

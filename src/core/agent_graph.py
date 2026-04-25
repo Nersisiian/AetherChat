@@ -3,12 +3,11 @@ from langgraph.graph import StateGraph, END
 from .retrieval.hybrid_search import HybridRetriever
 from .llm.base import BaseLLM
 from .memory.conversation import ConversationMemory
-from langchain_core.messages import HumanMessage, AIMessage
 
 class AgentState(TypedDict):
     query: str
     history: List[dict]
-    documents: List[dict]       # список {"content": ..., "metadata": ...}
+    documents: List[dict]
     answer: str
     needs_retrieval: bool
 
@@ -20,7 +19,6 @@ class RAGAgent:
         self.graph = self._build_graph()
 
     async def _decide_retrieval(self, state: AgentState) -> str:
-        # Анализируем, есть ли в истории достаточно информации без поиска
         context = "\n".join([d["content"] for d in state.get("documents", [])])
         prompt = (
             f"Вопрос: {state['query']}\n"
