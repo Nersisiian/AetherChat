@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+WORKDIR /app
+COPY pyproject.toml .
+RUN pip install --no-cache-dir chainlit
+COPY src/ src/
+COPY .env .
+EXPOSE 8001
+CMD ["chainlit", "run", "src/ui/app.py", "-h", "0.0.0.0", "-p", "8001"]

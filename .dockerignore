@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Tests and evaluation
+tests/
+notebooks/
+scripts/
+src/evaluation/
+*.ipynb
+
+# Git and environment
+.git/
+.env
+*.md
+README.md
+LICENSE
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker/
