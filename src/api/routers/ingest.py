@@ -25,5 +25,5 @@ async def upload_documents(files: List[UploadFile] = File(...)):
     global_retriever: HybridRetriever = HybridRetriever(chunked)
     global_retriever.index_documents()
     import src.api.dependencies as deps
-    deps._retriever = global_retriever
+    deps._retriever = global_retriever  # type: ignore[assignment]
     return {"status": "indexed", "chunks": len(chunked)}

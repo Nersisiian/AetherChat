@@ -40,7 +40,7 @@ class IngestionPipeline:
         retriever.index_documents()
 
         import src.api.dependencies as deps
-        deps._retriever = retriever
+        deps._retriever = retriever   # type: ignore[assignment]
         print("✅ Ingestion complete. Retriever is ready.")
 
 
