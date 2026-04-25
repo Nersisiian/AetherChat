@@ -7,9 +7,12 @@ async def start():
 
 @cl.on_message
 async def main(message: cl.Message):
+    # Получаем историю диалога из сессии Chainlit
+    messages = cl.user_session.get("messages", [])
     history = []
-    for m in cl.context.session.messages[:-1]:
-        history.append({"role": "user" if m.author == "user" else "assistant", "content": m.content})
+    for m in messages[:-1]:  # исключаем текущее сообщение
+        role = "user" if m["author"] == "user" else "assistant"
+        history.append({"role": role, "content": m["content"]})
     agent = get_agent()
     answer = await agent.arun(message.content, history)
     await cl.Message(content=answer).send()

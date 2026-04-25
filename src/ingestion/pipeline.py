@@ -1,25 +1,23 @@
-"""
-Pipeline for ingesting documents into the vector store.
-Usage:
-    python -m src.ingestion.pipeline --files ./docs/manual.pdf --url https://example.com
-"""
-
 import asyncio
 import argparse
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from .loader import ingest_all
 from .chunker import chunk_documents
 from ..core.retrieval.hybrid_search import HybridRetriever
 
-
 class IngestionPipeline:
-    def __init__(self):
-        self.documents = []
+    def __init__(self) -> None:
+        self.documents: list = []
 
-    async def run(self, files: List[str] = None, urls: List[str] = None, dirs: List[str] = None):
-        paths = []
+    async def run(
+        self,
+        files: Optional[List[str]] = None,
+        urls: Optional[List[str]] = None,
+        dirs: Optional[List[str]] = None
+    ) -> None:
+        paths: List[str] = []
         if files:
             paths.extend(files)
         if urls:
@@ -38,7 +36,7 @@ class IngestionPipeline:
         chunked = chunk_documents(docs)
         print(f"🧩 Created {len(chunked)} chunks. Indexing into Qdrant...")
 
-        retriever = HybridRetriever(chunked)
+        retriever: HybridRetriever = HybridRetriever(chunked)
         retriever.index_documents()
 
         import src.api.dependencies as deps
@@ -46,7 +44,7 @@ class IngestionPipeline:
         print("✅ Ingestion complete. Retriever is ready.")
 
 
-async def main():
+async def main() -> None:
     parser = argparse.ArgumentParser(description="Ingest documents into AetherChat")
     parser.add_argument("--files", nargs="*", help="Paths to PDF or Markdown files")
     parser.add_argument("--urls", nargs="*", help="URLs of web pages to ingest")

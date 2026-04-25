@@ -4,7 +4,7 @@ from .base import BaseLLM
 from ..config import settings
 
 class OpenAILLM(BaseLLM):
-    def __init__(self):
+    def __init__(self) -> None:
         self.client = AsyncOpenAI(api_key=settings.openai_api_key)
         self.model = settings.model_name
 
@@ -16,12 +16,14 @@ class OpenAILLM(BaseLLM):
         )
         return response.choices[0].message.content
 
-    async def astream(self, messages: List[Dict[str, str]]) -> AsyncIterator[str]:
-        stream = await self.client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            stream=True
-        )
-        async for chunk in stream:
-            if chunk.choices[0].delta.content:
-                yield chunk.choices[0].delta.content
+    def astream(self, messages: List[Dict[str, str]]) -> AsyncIterator[str]:
+        async def _stream():
+            stream = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                stream=True
+            )
+            async for chunk in stream:
+                if chunk.choices[0].delta.content:
+                    yield chunk.choices[0].delta.content
+        return _stream()

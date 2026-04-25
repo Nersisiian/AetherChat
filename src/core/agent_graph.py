@@ -1,4 +1,4 @@
-from typing import TypedDict, List
+from typing import TypedDict, List, Optional
 from langgraph.graph import StateGraph, END
 from .retrieval.hybrid_search import HybridRetriever
 from .llm.base import BaseLLM
@@ -12,7 +12,7 @@ class AgentState(TypedDict):
     needs_retrieval: bool
 
 class RAGAgent:
-    def __init__(self, retriever: HybridRetriever, llm: BaseLLM, memory: ConversationMemory = None):
+    def __init__(self, retriever: HybridRetriever, llm: BaseLLM, memory: Optional[ConversationMemory] = None):
         self.retriever = retriever
         self.llm = llm
         self.memory = memory or ConversationMemory()
@@ -40,7 +40,7 @@ class RAGAgent:
     async def _generate(self, state: AgentState) -> AgentState:
         context = "\n\n".join([d["content"] for d in state["documents"]]) if state["documents"] else "Нет документов."
         system = "Ты полезный ассистент. Отвечай на основе контекста. Не придумывай факты."
-        messages = [{"role": "system", "content": system}]
+        messages: list[dict] = [{"role": "system", "content": system}]
         for turn in state["history"]:
             messages.append(turn)
         messages.append({"role": "user", "content": f"Контекст:\n{context}\n\nВопрос: {state['query']}"})
@@ -60,7 +60,7 @@ class RAGAgent:
         builder.add_edge("generate", END)
         return builder.compile()
 
-    async def arun(self, query: str, history: List[dict] = None) -> str:
+    async def arun(self, query: str, history: Optional[List[dict]] = None) -> str:
         history = history or []
         state = {"query": query, "history": history, "documents": [], "answer": ""}
         result = await self.graph.ainvoke(state)
