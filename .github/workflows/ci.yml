@@ -25,7 +25,6 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install -e ".[dev]"
-          pip install ruff mypy types-aiofiles
 
       - name: Lint with ruff
         run: ruff check .
