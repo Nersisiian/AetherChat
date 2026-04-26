@@ -1,7 +1,7 @@
 from typing import List
 from langchain_core.documents import Document
 from langchain_community.retrievers import BM25Retriever
-from langchain.retrievers import EnsembleRetriever
+from langchain_core.retrievers import EnsembleRetriever
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
@@ -16,6 +16,7 @@ class HybridRetriever:
             model_kwargs={"device": "cpu"}
         )
         self.client = QdrantClient(url=settings.qdrant_url, api_key=settings.qdrant_api_key)
+        # Пересоздавать коллекцию на проде может быть опасно, но для тестов ок
         self.client.recreate_collection(
             collection_name=settings.collection_name,
             vectors_config=VectorParams(size=1024, distance=Distance.COSINE),
