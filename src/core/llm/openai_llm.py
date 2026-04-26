@@ -1,4 +1,4 @@
-from typing import AsyncIterator, List, Dict, Any, cast
+from typing import AsyncIterator, List, Dict
 from openai import AsyncOpenAI
 from .base import BaseLLM
 from ..config import settings
@@ -9,7 +9,6 @@ class OpenAILLM(BaseLLM):
         self.model = settings.model_name
 
     async def agenerate(self, messages: List[Dict[str, str]], stream: bool = False) -> str:
-        # OpenAI SDK принимает специфичные типы, мы передаём list[dict] через Any
         response = await self.client.chat.completions.create(
             model=self.model,
             messages=messages,  # type: ignore[arg-type]
