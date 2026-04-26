@@ -1,7 +1,6 @@
 from typing import List
 from langchain_core.documents import Document
-from langchain_community.retrievers import BM25Retriever
-from langchain_core.retrievers import EnsembleRetriever
+from langchain_community.retrievers import BM25Retriever, EnsembleRetriever
 from langchain_qdrant import QdrantVectorStore
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
