@@ -69,7 +69,7 @@ class HybridRetriever:
         add_docs(bm25_docs, 0.3)
         add_docs(dense_docs, 0.7)
 
-        sorted_ids = sorted(doc_score, key=doc_score.get, reverse=True)
+        sorted_ids = sorted(doc_score, key=lambda x: doc_score[x], reverse=True)
         candidates = [doc_map[doc_id] for doc_id in sorted_ids[:5]]
 
         if self._reranker and len(candidates) > 1:
